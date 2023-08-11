@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<style type="text/css">
+  body {
+    height: 100%;
+  }
+
+  .form-signin {
+    max-width: 330px;
+    padding: 1rem;
+  }
+
+  .form-signin .form-floating:focus-within {
+    z-index: 2;
+  }
+
+  .form-signin input[type="email"] {
+    margin-bottom: 10px;
+  }
+
+  .form-signin input[type="text"] {
+    margin-bottom: 10px;
+  }
+</style>
+
+<div class="container my-5">
+  <div class="row">
+    <div class="col-sm-2 border-end">
+      <li class="d-grid"><a href="{% url 'account' %}" class="btn btn-primary">Địa chỉ nhận hàng</a></li>
+      <li class="d-grid"><a href="{% url 'address' %}" class="btn">Address</a></li>
+    </div>
+    
+    <div class="col-sm-8 offset-sm-1">
+      <form class="form-signin w-100 m-auto" method="post">{% csrf_token %}
+
+        <h1 class="text-center">Địa chỉ nhận hàng</h1>
+  
+        <div class="form-floating">
+          <input type="text" class="form-control" name="name" id="Name" placeholder="Name" required>
+          <label for="Name">Tên người nhận</label>
+        </div>
+        <div class="form-floating">
+          <input type="text" class="form-control" name="address" id="Address" placeholder="Address" required>
+          <label for="Address">Address</label>
+        </div>
+        <div class="form-floating">
+          <input type="text" class="form-control" name="phone" id="Phone" placeholder="Phone" required>
+          <label for="Phone">Phone</label>
+        </div>
+  
+        {% for field in account_form %}
+        <p>
+          {% for error in field.errors %}
+        <p style="color: red">{{ error }}</p>
+        {% endfor %}
+        </p>
+        {% endfor %}
+        {% if account_form.non_field_errors %}
+        <div style="color: red">
+          <p>{{account_form.non_field_errors}}</p>
+        </div>
+  
+        {% endif %}
+  
+        {% if success_message %}
+        <p style="color:green; text-align: center;">{{success_message}}</p>
+        {% endif %}
+  
+        <button class="btn btn-primary w-100 py-2" type="submit">Cập nhật</button>
+      </form>  
+    </div>
+  </div>
+</div>
+
+
+{% endblock content %}

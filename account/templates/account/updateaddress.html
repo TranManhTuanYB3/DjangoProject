@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<style type="text/css">
+    body {
+        height: 100%;
+    }
+
+    .form-signin {
+        max-width: 330px;
+        padding: 1rem;
+    }
+
+    .form-signin .form-floating:focus-within {
+        z-index: 2;
+    }
+
+    .form-signin input[type="email"] {
+        margin-bottom: 10px;
+    }
+
+    .form-signin input[type="text"] {
+        margin-bottom: 10px;
+    }
+</style>
+
+<div class="container my-5">
+    <div class="row">
+        <form class="form-signin w-100 m-auto" method="post">{% csrf_token %}
+
+            <h1 class="text-center">Chỉnh sửa địa chỉ nhận hàng</h1>
+            
+            <div class="form-floating">
+                <input type="text" class="form-control" name="name" id="Name" value="{{form.name.value}}" placeholder="Name" required> 
+                <label for="Name">Tên người nhận</label>
+            </div>
+            <div class="form-floating">
+                <input type="text" class="form-control" name="address" id="Address" value="{{form.address.value}}" placeholder="Address" required>
+                <label for="Address">Địa chỉ</label>
+            </div>
+            <div class="form-floating">
+                <input type="text" class="form-control" name="phone" id="Phone" value="{{form.phone.value}}" placeholder="Phone" required>
+                <label for="Phone">SĐT</label>
+            </div>
+
+            {% for field inform %}
+            <p>
+                {% for error in field.errors %}
+            <p style="color: red">{{ error }}</p>
+            {% endfor %}
+            </p>
+            {% endfor %}
+            {% if form.non_field_errors %}
+            <div style="color: red">
+                <p>{{form.non_field_errors}}</p>
+            </div>
+
+            {% endif %}
+
+            {% if success_message %}
+            <p style="color:green; text-align: center;">{{success_message}}</p>
+            {% endif %}
+            <div class=" col-12 mt-3">
+                <button class="btn btn-primary" type="submit">Cập nhật</button>
+                <a href="{% url 'address' %}" type="button" class="btn btn-danger">Quay lại</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

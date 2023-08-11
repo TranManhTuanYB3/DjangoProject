@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<style type="text/css">
+  body {
+    height: 100%;
+  }
+
+  .form-signin {
+    max-width: 330px;
+    padding: 1rem;
+  }
+
+  .form-signin .form-floating:focus-within {
+    z-index: 2;
+  }
+
+  .form-signin input[type="email"] {
+    margin-bottom: 10px;
+  }
+
+  .form-signin input[type="password"] {
+    margin-bottom: 10px;
+  }
+
+  .n {
+    padding-left: 45px;
+  }
+</style>
+
+<form class="form-signin w-100 m-auto" method="post">{% csrf_token %}
+  <div class="text-center">
+    <img class="mb-4" src="{% static 'Logo T.png' %}" alt="Logo T image" width="72" height="72">
+    <h1 class="h3 mb-3 fw-normal">Log In</h1>
+  </div>
+
+
+  <div class="form-floating">
+    <input type="email" class="form-control" name="email" id="inputEmail" placeholder="name@example.com" required
+      autofocus>
+    <label for="inputEmail">Email address</label>
+  </div>
+  <div class="form-floating">
+    <input type="password" class="form-control" name="password" id="inputPassword" placeholder="Password" required>
+    <label for="inputPassword">Password</label>
+  </div>
+
+  {% for field in login_form %}
+  <p>
+    {% for error in field.errors %}
+  <p style="color: red">{{ error }}</p>
+  {% endfor %}
+  </p>
+  {% endfor %}
+
+  {% if login_form.non_field_errors %}
+  <div style="color: red">
+    <p>{{login_form.non_field_errors}}</p>
+  </div>
+  {% endif %}
+
+  <div class="form-check text-start my-3">
+    <input class="form-check-input" type="checkbox" value="remember-me" id="flexCheckDefault">
+    <label class="form-check-label" for="flexCheckDefault">
+      Remember
+    </label>
+    <a class="n" href="{% url 'register' %}">Create New Account</a>
+  </div>
+  <button class="btn btn-primary w-100 py-2" type="submit">Sign in</button>
+</form>
+
+<div class="d-flex flex-column">
+  <a class="m-auto" href="{% url 'password_reset' %}">Forgot password</a>
+</div>
+
+
+{% endblock content %}

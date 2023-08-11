@@ -1,0 +1,85 @@
+<style type="text/css">
+	.form-control-dark {
+		border-color: var(--bs-gray);
+	}
+
+	.form-control-dark:focus {
+		border-color: #fff;
+		box-shadow: 0 0 0 .25rem rgba(255, 255, 255, .25);
+	}
+
+	.text-small {
+		font-size: 85%;
+	}
+
+	.dropdown-toggle:not(:focus) {
+		outline: 0;
+	}
+
+	.name{
+		padding-left: 2px;
+	}
+</style>
+
+<!-- Header -->
+<header class="p-3 mb-3 border-bottom bg-white">
+	<div class="container">
+		<div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+			<a href="{% url 'home' %}"
+				class="d-flex align-items-center mb-2 mb-lg-0 link-body-emphasis text-decoration-none">
+				<img class="bi me-2" width="40" height="40" {% load static %} src="{% static 'Logo T.png' %}"
+					alt="Logo T image">
+			</a>
+
+			<ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+				<li><a href="{% url 'home' %}" class="nav-link px-2 link-body-emphasis">Home</a></li>
+				<li class="nav-item dropdown">
+					<a href="#" class="nav-link link-body-emphasis dropdown-toggle" data-bs-toggle="dropdown"
+						aria-expanded="false">Sản phẩm</a>
+					<ul class="dropdown-menu">
+						<li><a class="dropdown-item" href="{% url 'category' 'M' %}">Sữa tươi</a></li>
+						<li><a class="dropdown-item" href="{% url 'category' 'Y' %}">Sữa chua</a></li>
+						<li><a class="dropdown-item" href="{% url 'category' 'O' %}">Các sản phẩm từ sữa</a></li>
+					</ul>
+				</li>
+			</ul>
+
+			<div class="search-bar px-2">
+				<form method="get">
+					<input class="form-control" type="text" name="q" id="id_q" placeholder="Search...">
+				</form>
+			</div>
+
+			{% if request.user.is_authenticated %}
+			<ul class="nav">
+				<li><a class="nav-link px-2 link-body-emphasis" href="#">Wishlist 4</a></li>
+				<li><a class="nav-link px-2 link-body-emphasis" href="{% url 'showcart' %}">Cart 4</a></li>
+			</ul>
+
+			<div class="dropdown text-end">
+				<a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle"
+					data-bs-toggle="dropdown" aria-expanded="false">
+					<span class="name">{{user.username}}</span>
+				</a>
+				<ul class="dropdown-menu text-small">
+					<li><a class="dropdown-item" href="{% url 'account' %}">Profile</a></li>
+					<li><a class="dropdown-item" href="#">Order</a></li>
+					<li><a class="dropdown-item" href="{% url 'password_change' %}">Change Password</a></li>
+					<li>
+						<hr class="dropdown-divider">
+					</li>
+					<li><a class="dropdown-item" href="{% url 'logout' %}">Sign out</a></li>
+				</ul>
+				{% else %}
+				<ul class="nav nav-pills">
+					<li class="nav-item"><a href="{% url 'login' %}" class="btn btn-outline-primary me-2">Log in</a>
+					</li>
+					<li class="nav-item"><a href="{% url 'register' %}" class="btn btn-primary">Sign-up</a></li>
+				</ul>
+				{% endif %}
+			</div>
+		</div>
+	</div>
+</header>
+
+<!-- End Header -->

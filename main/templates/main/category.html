@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<style type="text/css">
+	body{
+		background-color: #c7e9f8;
+	}
+</style>
+<div class="container my-5">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="row">
+                <h1 class="text-center">
+                    {% if val == 'M' %}
+                        Sữa tươi
+                    {% elif val == 'Y' %}
+                        Sữa chua
+                    {% else %}
+                        Các sản phẩm từ sữa
+                    {% endif %}
+                </h1>
+                <br><br><br>
+                {% for prod in products %}
+                    <div class="col text-center mb-4">
+                        <a href="{% url 'product-detail' prod.id %}" class="btn">
+                            <div>
+                                <img src="{{prod.images.url}}" width="300" height="200" alt="">
+                                <div class="fw-blod">
+                                    {{prod.title}}
+                                </div>
+                                <div class="fw-blod text-danger">
+                                    {% if prod.price != None %}
+                                        Giá: {{prod.price}} VNĐ
+                                    {% else %}
+
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

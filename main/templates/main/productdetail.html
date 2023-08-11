@@ -1,0 +1,124 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<style type="text/css">
+    body {
+        background-color: #c7e9f8;
+    }
+</style>
+<div class="container">
+    <div class="row flex justify-content-between">
+        <div class="img2 col-lg-6 mt-5">
+            <img id="image" src="{{ products.images.url }}" class="image col-sm-12 col-lg-12 text-sm-center w-100 h-75"
+                alt="">
+        </div>
+        <div class="product-detail col-lg-6">
+            <h1 style="font-family: 'Times New Roman', Times, serif; font-size: 50px;">{{ products.title }}</h1>
+            <h5 id="price">
+                {% if products.price != None %}
+                Giá: {{ products.price }} VNĐ
+                {% else %}
+
+                {% endif %}
+            </h5><br>
+            <div id="switch-buttons">
+                <style type="text/css">
+                    .switch-button {
+                        border: 1px solid #000000;
+                        border-radius: 16px;
+                        margin: auto;
+                        background-color: #ffffff;
+                        color: #555555;
+                    }
+
+                    .switch-button.active {
+                        background-color: #cccccc;
+                        color: #FFFFFF;
+                    }
+                </style>
+                {% for m in mproducts %}
+                <button type="button" class="switch-button mx-1 px-2" data-image="{{ m.images.url }}"
+                    data-price="{{ m.price }}" data-title="{{ m.title }}" data-product-id="{{ m.id }}">{{ m.title
+                    }}</button>
+                {% endfor %}
+            </div>
+
+            <h4>Thông tin sản phẩm</h4>
+            <ul class="fs-5" style="font-family: 'Times New Roman', Times, serif, Times, serif;">
+                <li>{{products.description}}</li>
+            </ul>
+            <ul class="fs-5" style="font-family: 'Times New Roman', Times, serif, Times, serif;">
+                <li>{{products.composition}}</li>
+            </ul>
+            <ul class="fs-5" style="font-family: 'Times New Roman', Times, serif, Times, serif;">
+                <li>{{products.prodapp}}</li>
+            </ul>
+
+            <!-- Trong form "Add to Cart" -->
+            <form id="add-to-cart-form" action="{% url 'addtocart' %}" method="get" class="d-inline">
+                <input type="hidden" name="prod_id" id="selected-product-id" value="{{products.id}}">
+                
+                <!-- ... (các input khác) -->
+                <button type="submit" class="btn btn-primary shadow px-5 py-2" id="add-to-cart-button">Add to
+                    Cart</button>
+            </form>
+
+
+            <a href="{% url 'showcart' %}" class="btn btn-warning shadow px-5 py-2 ms-4">Buy Now</a>
+
+        </div>
+    </div>
+</div>
+</div>
+
+<!-- Chuyển đổi ảnh và giá tiền -->
+<script>
+    var selectedProduct = {
+    id: document.getElementById("selected-product-id").value,
+    price: null,
+    image: null
+};
+
+var productImage = document.getElementById("image");
+var productPrice = document.getElementById("price");
+var switchButtons = document.querySelectorAll(".switch-button");
+
+var currentProductIndex = 0;
+switchButtons[currentProductIndex].classList.add("active");
+
+switchButtons.forEach(function (button, index) {
+    button.addEventListener("click", function () {
+        switchButtons[currentProductIndex].classList.remove("active");
+
+        currentProductIndex = index;
+        button.classList.add("active");
+
+        var imageUrl = button.getAttribute("data-image");
+        var price = button.getAttribute("data-price");
+        var title = button.getAttribute("data-title");
+        var productId = button.getAttribute("data-product-id");
+
+        productImage.src = imageUrl;
+        productPrice.innerText = "Giá: " + price + " VNĐ";
+
+        selectedProduct.id = productId;
+        selectedProduct.price = price;
+        selectedProduct.image = imageUrl;
+        
+        console.log("Selected Product ID:", selectedProduct.id);
+    });
+});
+    document.querySelector("#add-to-cart-button").addEventListener("click", function () {
+    var form = document.querySelector("#add-to-cart-form");
+    form.querySelector("[name='prod_id']").value = selectedProduct.id;
+
+    // In ra giá trị ID trước khi submit form
+    console.log("Selected Product ID for Submit:", selectedProduct.id);
+
+    form.submit();
+});
+
+</script>
+
+{% endblock content %}
