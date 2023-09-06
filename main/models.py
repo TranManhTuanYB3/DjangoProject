@@ -1,5 +1,5 @@
 from django.db import models
-from account.models import Account
+from account.models import Account, Customer
 
 CATEGORY_CHOICES = (
     ('M','Milk'),
@@ -27,10 +27,44 @@ class MilkProduct(models.Model):
         return self.title
 
 class Cart(models.Model):
-    user = models.ForeignKey(Account, on_delete=models.CASCADE)
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    user = models.ForeignKey(Account, on_delete=models.CASCADE, blank=True, null=True)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, blank=True, null=True)
+    mproduct = models.ForeignKey(MilkProduct, on_delete=models.CASCADE, blank=True, null=True)
     quantity = models.PositiveIntegerField(default=1)
 
     @property
     def total_cost(self):
-        return self.quantity * self.product.price
+        if(self.product.price!=None):
+            return self.quantity * self.product.price
+        else:
+            return self.quantity * self.mproduct.price    
+
+STATUS_CHOICES = (
+    ('Accepted', 'Accepted'),
+    ('Packed', 'Packed'),
+    ('On The Way', 'On The Way'),
+    ('Delivered', 'Delivered'),
+    ('Cancel', 'Cancel'),
+    ('Pending', 'Pending'),
+)
+
+class OrderPlaced(models.Model):
+    user = models.ForeignKey(Account, on_delete=models.CASCADE)
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    mproduct = models.ForeignKey(MilkProduct, on_delete=models.CASCADE, blank=True, null=True)
+    quantity = models.PositiveIntegerField(default=1)
+    ordered_date = models.DateTimeField(auto_now_add=True)
+    status = models.CharField(max_length=50, choices=STATUS_CHOICES, default='Pending')
+
+    @property
+    def total_cost(self):
+        if(self.product.price!=None):
+            return self.quantity * self.product.price
+        else:
+            return self.quantity * self.mproduct.price
+        
+class Wishlist(models.Model):
+    user = models.ForeignKey(Account, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    mproduct = models.ForeignKey(MilkProduct, on_delete=models.CASCADE, blank=True, null=True)

@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <h2 class="text-center">Order</h2>
+
+        <div class="col-sm-9 offset-sm-1">
+            {% for op in order_placed %}
+            <div class="row">
+                <div class="col-sm-2">
+                    {% if op.mproduct == None %}
+                    <img src="{{op.product.images.url}}" class="img-fluid" height="100" width="100" alt="">
+                    {% else %}
+                    <img src="{{op.mproduct.images.url}}" class="img-fluid" height="100" width="100" alt="">
+                    {% endif %}
+                </div>
+                <div class="col-sm-7">
+                    {% if op.mproduct == None %}
+                    <p>Product: {{op.product.title}}</p>
+                    <p>Quantity: {{op.quantity}}</p>
+                    <p>Price: {{op.totalamount}}</p>
+                    {% else %}
+                    <p>Product: {{op.mproduct.category}} ({{op.mproduct.title}})</p>
+                    <p>Quantity: {{op.quantity}}</p>
+                    <p>Price: {{op.totalamount}}</p>
+                    {% endif %}
+                </div>
+                <div class="col-sm-3">
+                    <p>Order status: {{op.status}}</p>
+                    {% if op.status == 'Accepted' %}
+                    <div class="progress">
+                        <div class="progress-bar" role="progressbar" style="width: 20%;" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    {% endif %}
+                    {% if op.status == 'Packed' %}
+                    <div class="progress">
+                        <div class="progress-bar bg-info" role="progressbar" style="width: 40%;" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    {% endif %}
+                    {% if op.status == 'On The Way' %}
+                    <div class="progress">
+                        <div class="progress-bar bg-warning" role="progressbar" style="width: 70%;" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    {% endif %}
+                    {% if op.status == 'Delivered' %}
+                    <div class="progress">
+                        <div class="progress-bar bg-success" role="progressbar" style="width: 100%;" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    {% endif %}
+                    {% if op.status == 'Cancel' %}
+                    <div class="progress">
+                        <div class="progress-bar bg-danger" role="progressbar" style="width: 100%;" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            <hr class="text-muted">
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock content %}

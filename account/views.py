@@ -1,10 +1,8 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate, logout
 from django.views import View
-
+from main.models import Cart, Wishlist
 from account.forms import RegistrationForm, AccountAuthenticationForm, AccountUpdateForm, Customer
-
-
 
 def registration_view(request):
 	context = {}
@@ -29,7 +27,6 @@ def registration_view(request):
 def logout_view(request):
 	logout(request)
 	return redirect('/')
-
 
 def login_view(request):
 
@@ -58,11 +55,19 @@ def login_view(request):
 	# print(form)
 	return render(request, "account/login.html", context)
 
+def must_authenticate_view(request):
+	return render(request, 'account/authenticate.html', {})
 
-def account_view(request):
-
+def account_view(request):	    
 	if not request.user.is_authenticated:	# Xác thực xem đã đăng nhập chưa
-		return redirect("login")
+		return redirect("authenticate/")
+	
+	user = request.user
+	totalitem = 0
+	wishitem = 0
+	if request.user.is_authenticated:
+		totalitem = len(Cart.objects.filter(user=user))
+		wishitem = len(Wishlist.objects.filter(user=user))
 
 	context = {}
 	if request.POST:
@@ -81,20 +86,41 @@ def account_view(request):
 	else:
 		form = AccountUpdateForm()
 	context['account_form'] = form
+	context['totalitem'] = totalitem
+	context['wishitem'] = wishitem
 	return render(request, "account/account.html", context)
 
 def address(request):
+	if not request.user.is_authenticated:
+		return redirect("/must_authenticate")
+	
+	user = request.user
+	totalitem = 0
+	wishitem = 0
+	if request.user.is_authenticated:
+		totalitem = len(Cart.objects.filter(user=user))
+		wishitem = len(Wishlist.objects.filter(user=user))
+	
 	context = {}
-	add = Customer.objects.filter(user=request.user)
+	add = Customer.objects.filter(user=user)
 	context = {
 		'add': add,
 	}
+	context['totalitem'] = totalitem
+	context['wishitem'] = wishitem
 	return render(request, 'account/address.html', context)
 
 def updateaddress(request, pk):
     
-	if not request.user.is_authenticated:	# Xác thực xem đã đăng nhập chưa
-		return redirect("login")
+	if not request.user.is_authenticated:
+		return redirect("/must_authenticate")
+	
+	user = request.user
+	totalitem = 0
+	wishitem = 0
+	if request.user.is_authenticated:
+		totalitem = len(Cart.objects.filter(user=user))
+		wishitem = len(Wishlist.objects.filter(user=user))
 	
 	context = {}
 	add = Customer.objects.get(pk=pk)
@@ -111,4 +137,6 @@ def updateaddress(request, pk):
 		form = AccountUpdateForm(instance=add)
 		
 	context['form'] = form
+	context['totalitem'] = totalitem
+	context['wishitem'] = wishitem
 	return render(request, 'account/updateaddress.html', context)	

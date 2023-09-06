@@ -35,25 +35,37 @@
 				<li><a href="{% url 'home' %}" class="nav-link px-2 link-body-emphasis">Home</a></li>
 				<li class="nav-item dropdown">
 					<a href="#" class="nav-link link-body-emphasis dropdown-toggle" data-bs-toggle="dropdown"
-						aria-expanded="false">Sản phẩm</a>
+						aria-expanded="false">Product</a>
 					<ul class="dropdown-menu">
-						<li><a class="dropdown-item" href="{% url 'category' 'M' %}">Sữa tươi</a></li>
-						<li><a class="dropdown-item" href="{% url 'category' 'Y' %}">Sữa chua</a></li>
-						<li><a class="dropdown-item" href="{% url 'category' 'O' %}">Các sản phẩm từ sữa</a></li>
+						<li><a class="dropdown-item" href="{% url 'category' 'M' %}">Milk</a></li>
+						<li><a class="dropdown-item" href="{% url 'category' 'Y' %}">Yougurt</a></li>
+						<li><a class="dropdown-item" href="{% url 'category' 'O' %}">Other Products</a></li>
 					</ul>
 				</li>
 			</ul>
 
 			<div class="search-bar px-2">
-				<form method="get">
-					<input class="form-control" type="text" name="q" id="id_q" placeholder="Search...">
+				<form method="get" action="/search" role="search">
+					<input class="form-control" type="search" name="search" placeholder="Search...">
 				</form>
 			</div>
 
 			{% if request.user.is_authenticated %}
 			<ul class="nav">
-				<li><a class="nav-link px-2 link-body-emphasis" href="#">Wishlist 4</a></li>
-				<li><a class="nav-link px-2 link-body-emphasis" href="{% url 'showcart' %}">Cart 4</a></li>
+				<li><a class="nav-link px-2 link-body-emphasis" href="{% url 'wishlist' %}">
+				<span class="badge bg-danger">{% if wishitem > 0 %} {{wishitem}} {% endif %}</span><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-suit-heart text-center" viewBox="0 0 16 16">
+					<path d="m8 6.236-.894-1.789c-.222-.443-.607-1.08-1.152-1.595C5.418 2.345 4.776 2 4 2 2.324 2 1 3.326 1 4.92c0 1.211.554 2.066 1.868 3.37.337.334.721.695 1.146 1.093C5.122 10.423 6.5 11.717 8 13.447c1.5-1.73 2.878-3.024 3.986-4.064.425-.398.81-.76 1.146-1.093C14.446 6.986 15 6.131 15 4.92 15 3.326 13.676 2 12 2c-.777 0-1.418.345-1.954.852-.545.515-.93 1.152-1.152 1.595L8 6.236zm.392 8.292a.513.513 0 0 1-.784 0c-1.601-1.902-3.05-3.262-4.243-4.381C1.3 8.208 0 6.989 0 4.92 0 2.755 1.79 1 4 1c1.6 0 2.719 1.05 3.404 2.008.26.365.458.716.596.992a7.55 7.55 0 0 1 .596-.992C9.281 2.049 10.4 1 12 1c2.21 0 4 1.755 4 3.92 0 2.069-1.3 3.288-3.365 5.227-1.193 1.12-2.642 2.48-4.243 4.38z"/>
+				  </svg>
+				<div class="text-small">
+					Wishlist
+				</div></a></li>
+				<li><a class="nav-link px-2 link-body-emphasis" href="{% url 'showcart' %}">
+				<span class="badge bg-danger">{% if totalitem > 0 %} {{totalitem}} {% endif %}</span><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-cart2" viewBox="0 0 16 16">
+					<path d="M0 2.5A.5.5 0 0 1 .5 2H2a.5.5 0 0 1 .485.379L2.89 4H14.5a.5.5 0 0 1 .485.621l-1.5 6A.5.5 0 0 1 13 11H4a.5.5 0 0 1-.485-.379L1.61 3H.5a.5.5 0 0 1-.5-.5zM3.14 5l1.25 5h8.22l1.25-5H3.14zM5 13a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0zm9-1a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0z"/>
+				  </svg>
+				  <div class="text-small">
+					Basket
+				  </div> </a></li>
 			</ul>
 
 			<div class="dropdown text-end">
@@ -63,7 +75,7 @@
 				</a>
 				<ul class="dropdown-menu text-small">
 					<li><a class="dropdown-item" href="{% url 'account' %}">Profile</a></li>
-					<li><a class="dropdown-item" href="#">Order</a></li>
+					<li><a class="dropdown-item" href="{% url 'orders' %}">Order</a></li>
 					<li><a class="dropdown-item" href="{% url 'password_change' %}">Change Password</a></li>
 					<li>
 						<hr class="dropdown-divider">

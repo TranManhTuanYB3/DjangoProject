@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row">
+        <h1 class="text-center mb-5">Wishlist</h1>
+        <div class="col-sm-12">
+            <div class="row">
+                {% for prod in wishlist %}
+                    <div class="col text-center mb-4">
+                        <a href="{% url 'product-detail' prod.product.id %}" class="btn">
+                            <div>
+                                <img src="{{prod.product.images.url}}" width="300" height="200" alt="">
+                                <div class="fw-blod">
+                                    {{prod.product.title}}
+                                </div>
+                                <div class="fw-blod text-danger">
+                                    {% if prod.product.price != None %}
+                                        Price: {{prod.product.price}} VNĐ
+                                    {% else %}
+
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
