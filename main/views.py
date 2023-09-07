@@ -28,6 +28,9 @@ def CategoryView(request, val):
     return render(request, 'main/category.html', locals())
 
 def ProductDetail(request, pk):
+    if not request.user.is_authenticated:
+        return redirect("/must_authenticate")
+    
     user=request.user
     totalitem = 0
     wishitem = 0
@@ -249,6 +252,9 @@ def remove_cart(request):
         return JsonResponse(data)
     
 def plus_wishlist(request):
+    if not request.user.is_authenticated:
+        return redirect("/must_authenticate")
+    
     if request.method == 'GET':
         user = request.user
         product_id = request.GET.get('prod_id')
