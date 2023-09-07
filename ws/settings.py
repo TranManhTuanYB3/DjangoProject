@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-@v7($-7u_)puy28umj%o^3%ah=ne(ywbtbq#^*m@^rlvbr-8c7
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['54.206.236.191']
+ALLOWED_HOSTS = []
 
 if DEBUG:
     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
@@ -81,12 +81,8 @@ WSGI_APPLICATION = 'ws.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'project',
-        'USER': 'tuan',
-        'PASSWORD': 'tuan2003',
-        'HOST': 'localhost',
-        'PORT': '3306',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
 
